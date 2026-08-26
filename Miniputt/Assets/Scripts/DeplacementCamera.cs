@@ -12,13 +12,14 @@ public class DeplacementCamera : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        InputAction actionDeplacement = controles.actions.FindAction("player/DeplacerCamera");
+        Debug.Log("ALLOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+        InputAction actionDeplacement = controles.actions.FindAction("Player/DeplacerCamera");
         actionDeplacement.performed += CommencerDeplacement;
         actionDeplacement.canceled += ArreterDeplacement;
     }
     private void CommencerDeplacement(InputAction.CallbackContext contexte)
     {
-        Vector2 entreesDeplacement = contexte.ReadValue<Vector2>().normalized;
+        deplacement = contexte.ReadValue<Vector2>().normalized;
     }
     private void ArreterDeplacement(InputAction.CallbackContext contexte)
     {
@@ -28,6 +29,7 @@ public class DeplacementCamera : MonoBehaviour
     private void GererDeplacement() {
         if (deplacement.sqrMagnitude > 0.0f) //Si on se déplace réellement
         {
+            Debug.Log("Deplacements en cours(?)");
             Vector3 positionDeplacement = transform.forward * deplacement.y * Time.deltaTime
             + transform.right * deplacement.x * Time.deltaTime;
             deplacement.Normalize();
@@ -39,7 +41,7 @@ public class DeplacementCamera : MonoBehaviour
     private void OnDestroy()
     {
         if (controles == null) return;
-        InputAction actiondeplacement = controles.actions.FindAction("player/DeplacerCamera");
+        InputAction actiondeplacement = controles.actions.FindAction("Player/DeplacerCamera");
         actiondeplacement.performed -= CommencerDeplacement;
         actiondeplacement.canceled -= ArreterDeplacement;
 
