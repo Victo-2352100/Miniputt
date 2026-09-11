@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3580097201043942377}
   - component: {fileID: 2101466992226969570}
+  - component: {fileID: 1848227033289962243}
   m_Layer: 0
   m_Name: DetecteTrou
   m_TagString: Untagged
@@ -55,3 +56,17 @@ CapsuleCollider:
   m_Height: 2.8095431
   m_Direction: 1
   m_Center: {x: -0.013144255, y: 0.9999993, z: -0.009293079}
+--- !u!114 &1848227033289962243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2203757821379395241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a578827808c3eac4c8d868cd2e9089aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NewMonoBehaviourScript
+  collider: {fileID: 2101466992226969570}
+  pointDepart: {fileID: 0}

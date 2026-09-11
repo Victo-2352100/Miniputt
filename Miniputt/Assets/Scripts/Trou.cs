@@ -1,11 +1,9 @@
 using UnityEngine;
-
+/// <summary>
+/// Script gérant les collisions dans le trou/but du parcours de miniputt.
+/// </summary>
 public class NewMonoBehaviourScript : MonoBehaviour
 {
-
-    [SerializeField]
-    private CapsuleCollider collider;
-
     [SerializeField, Tooltip("Point de départ de la balle")]
     private GameObject pointDepart;
 
@@ -15,7 +13,10 @@ public class NewMonoBehaviourScript : MonoBehaviour
     { //Trouver la position du point de départ
         positionDepart = pointDepart.transform.position;
     }
-
+    /// <summary>
+    /// Fonction déclenchée lorsqu'un objet atteint le trou. Permet de guider la balle vers son prochain point.
+    /// </summary>
+    /// <param name="other">L'objet atteignant le trou.</param>
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("Trigger déclenché, on essait de téléporter le gameObject...");
