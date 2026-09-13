@@ -408,6 +408,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2679421307402504173, guid: d166dea55b0af44498abb5a4577c78e9, type: 3}
   m_PrefabInstance: {fileID: 821198123}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1357297517 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5116633963745060009, guid: ab14ffeea1e7ccf44849127275000825, type: 3}
+  m_PrefabInstance: {fileID: 2018836016}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
 --- !u!1 &1608373195
 GameObject:
   m_ObjectHideFlags: 0
@@ -839,6 +850,18 @@ PrefabInstance:
       propertyPath: controles
       value: 
       objectReference: {fileID: 1608373197}
+    - target: {fileID: 5069189977493025033, guid: ab14ffeea1e7ccf44849127275000825, type: 3}
+      propertyPath: limitesZoom.x
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5069189977493025033, guid: ab14ffeea1e7ccf44849127275000825, type: 3}
+      propertyPath: limitesZoom.y
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 5069189977493025033, guid: ab14ffeea1e7ccf44849127275000825, type: 3}
+      propertyPath: cameraGereeDieu
+      value: 
+      objectReference: {fileID: 1357297517}
     - target: {fileID: 7112953183717713298, guid: ab14ffeea1e7ccf44849127275000825, type: 3}
       propertyPath: m_Name
       value: GestionCamera

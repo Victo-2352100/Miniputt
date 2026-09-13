@@ -1,3 +1,5 @@
+using Unity.Cinemachine;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 /// <summary>
@@ -12,6 +14,9 @@ public class DeplacementCamera : MonoBehaviour
     [SerializeField]
     private float vitesseRotationY = 10.0f;
     [SerializeField]
+    private float vitesseZoom = 5.0f;
+
+    [SerializeField]
     private PlayerInput controles;
     [SerializeField, Tooltip("Volume qui confine la camera")]
     private BoxCollider collider;
@@ -19,10 +24,18 @@ public class DeplacementCamera : MonoBehaviour
     [SerializeField, Tooltip("Limites de rotation selon les angles (x, y, z)")]
     private Vector2 LimitesRotation;
     private Vector2 deplacement;
+    [SerializeField]
+    private Vector2 limitesZoom;
+
+    [SerializeField, Tooltip("La caméra-dieu")] //La camera suivi ne devrait pas être nécessaire pour le zoom ou rotation
+    private CinemachineCamera cameraGereeDieu;
 
     //Angle de la rotation
     private float rotationX;
     private float rotationY;
+
+    //Valeur actuelle du zoom de la caméra (distance comparé à cible)
+    private float zoom;
     /// <summary>
     /// Méthode lancée lorsque le jeu est lancé.
     /// </summary>
@@ -40,7 +53,12 @@ public class DeplacementCamera : MonoBehaviour
         InputAction actionRotationY = controles.actions.FindAction("player/RotationY");
         actionRotationY.performed += CommencerRotationY;
         actionRotationY.canceled += ArreterRotationY;
+
+        InputAction actionZoomCamera = controles.actions.FindAction("player/ZoomCamera");
+        actionZoomCamera.performed += CommencerZoom;
+        actionZoomCamera.canceled += ArreterZoom;
     }
+
     /// <summary>
     /// Méthode lancée lorsqu'un action lié au déplacement de la caméra est performés
     /// </summary>
@@ -48,7 +66,7 @@ public class DeplacementCamera : MonoBehaviour
     private void CommencerDeplacement(InputAction.CallbackContext contexte)
     {
         //On mets les valeurs de base du déplacement (seront multiplié par la vitesse et le temps)
-        deplacement = contexte.ReadValue<Vector2>().normalized;
+        deplacement = vitesseDeplacement * contexte.ReadValue<Vector2>().normalized;
     }
     /// <summary>
     /// Méthode lancée lorsque l'action gérant le déplacement de la caméra est annulé (relâchement de la touche)
@@ -87,6 +105,16 @@ public class DeplacementCamera : MonoBehaviour
     private void ArreterRotationY(InputAction.CallbackContext contexte)
     {
         rotationY = 0.0f;
+    }
+
+    private void CommencerZoom(InputAction.CallbackContext contexte)
+    {
+        zoom = vitesseZoom * contexte.ReadValue<float>();
+    }
+
+    private void ArreterZoom(InputAction.CallbackContext contexte)
+    {
+        zoom = 0.0f;
     }
     /// <summary>
     /// Méthode lancée pour effectuer les déplacements sur la caméra selon des coordonnées
@@ -130,6 +158,19 @@ public class DeplacementCamera : MonoBehaviour
             transform.Rotate(new Vector3(rotationY * Time.deltaTime, 0.0f, 0.0f), Space.Self);
         }
     }
+
+    private void EffectuerZoom()
+    {
+        CinemachinePositionComposer positionComposer = cameraGereeDieu.GetComponent<CinemachinePositionComposer>();
+        Vector3 offsetCamera = positionComposer.TargetOffset + positionComposer.TargetOffset.normalized * zoom; //On a besoin du vecteur entre les deux position. Vector = destination - départ
+		float distanceOffset = offsetCamera.magnitude; //(.magnitude pour avoir seulement la distance, pas les vecteurs)
+
+		if (distanceOffset < limitesZoom.x || distanceOffset > limitesZoom.y)
+        {
+            positionComposer.TargetOffset = offsetCamera;//(un + puisqu'il faut que si une des valeur du vecteur est négative, elle puisse s'appliquer normalement)
+
+        }
+    }
     /// <summary>
     /// Méthode lancée lors de la suppression de la caméra-dieu.
     /// </summary>
@@ -141,6 +182,7 @@ public class DeplacementCamera : MonoBehaviour
         InputAction actiondeplacement = controles.actions.FindAction("player/DeplacerCamera");
         InputAction actionRotationX = controles.actions.FindAction("player/RotationX");
         InputAction actionRotationY = controles.actions.FindAction("player/RotationY");
+        InputAction actionZoomCamera = controles.actions.FindAction("player/ZoomCamera");
         //Suppression des événements de mouvement
         actiondeplacement.performed -= CommencerDeplacement;
         actiondeplacement.canceled -= ArreterDeplacement;
@@ -150,7 +192,9 @@ public class DeplacementCamera : MonoBehaviour
         //Suppression des événements de rotation à l'axe Y
         actionRotationY.performed -= CommencerRotationY;
         actionRotationY.canceled -= ArreterRotationY;
-
+        //Suppression des événements de zoom
+        actionZoomCamera.performed -= CommencerZoom;
+        actionZoomCamera.canceled -= ArreterZoom;
     }
     /// <summary>
     /// Méthode lancée à chaque image (ou frame) lors du déroulement du jeu 
@@ -160,5 +204,6 @@ public class DeplacementCamera : MonoBehaviour
         GererDeplacement();
         EffectuerRotationX();
         EffectuerRotationY();
+        EffectuerZoom();
     }
 }
