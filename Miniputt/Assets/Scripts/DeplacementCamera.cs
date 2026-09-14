@@ -7,20 +7,21 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class DeplacementCamera : MonoBehaviour
 {
+    //Vitesses modifiables de la caméra
     [SerializeField]
     private float vitesseDeplacement = 5.0f;
     [SerializeField]
-    private float vitesseRotationX = 10.0f;
+    private float vitesseRotationX = 15.0f;
     [SerializeField]
-    private float vitesseRotationY = 10.0f;
+    private float vitesseRotationY = 15.0f;
     [SerializeField]
     private float vitesseZoom = 5.0f;
-
+    //Contrôles et confins de la caméra assignables
     [SerializeField]
     private PlayerInput controles;
     [SerializeField, Tooltip("Volume qui confine la camera")]
     private BoxCollider collider;
-
+    //Limitations des déplacements de la caméra
     [SerializeField, Tooltip("Limites de rotation selon les angles (x, y, z)")]
     private Vector2 LimitesRotation;
     private Vector2 deplacement;
@@ -53,7 +54,7 @@ public class DeplacementCamera : MonoBehaviour
         InputAction actionRotationY = controles.actions.FindAction("player/RotationY");
         actionRotationY.performed += CommencerRotationY;
         actionRotationY.canceled += ArreterRotationY;
-
+        //Initialisation du contrôles de zoom et création des événements liés
         InputAction actionZoomCamera = controles.actions.FindAction("player/ZoomCamera");
         actionZoomCamera.performed += CommencerZoom;
         actionZoomCamera.canceled += ArreterZoom;
@@ -102,16 +103,26 @@ public class DeplacementCamera : MonoBehaviour
     {
         rotationY = vitesseRotationY * contexte.ReadValue<float>();
     }
+    /// <summary>
+    /// Méthode lancée lorsqu'on relâche les touches liées à la rotation sur l'axe des Y
+    /// </summary>
+    /// <param name="contexte"></param>
     private void ArreterRotationY(InputAction.CallbackContext contexte)
     {
         rotationY = 0.0f;
     }
-
+    /// <summary>
+    /// Méthode qui se lance lorsque l'utilisateur fait rouler la roulette de sa souris pour effectuer un zoom
+    /// </summary>
+    /// <param name="contexte">Valeur engendrée par le roulement de la roulette (positif si roule par le haut, négatif si c'est le bas)</param>
     private void CommencerZoom(InputAction.CallbackContext contexte)
     {
         zoom = vitesseZoom * contexte.ReadValue<float>();
     }
-
+    /// <summary>
+    /// Méthode qui se lance lorsque l'utilisateur cesse de faire rouler la roulette de sa souris pour mettre fin au zoom
+    /// </summary>
+    /// <param name="contexte">Valeur engendrée par la roulette de la souris</param>
     private void ArreterZoom(InputAction.CallbackContext contexte)
     {
         zoom = 0.0f;
@@ -158,7 +169,9 @@ public class DeplacementCamera : MonoBehaviour
             transform.Rotate(new Vector3(rotationY * Time.deltaTime, 0.0f, 0.0f), Space.Self);
         }
     }
-
+    /// <summary>
+    /// Méthode s'occupant d'appliquer le zoom et donc de réduire ou augmenter la distance entre la cible et la caméra-dieu
+    /// </summary>
     private void EffectuerZoom()
     {
         CinemachinePositionComposer positionComposer = cameraGereeDieu.GetComponent<CinemachinePositionComposer>();
