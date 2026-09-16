@@ -174,6 +174,7 @@ public class DeplacementCamera : MonoBehaviour
     /// </summary>
     private void EffectuerZoom()
     {
+        //Inspiré par mes notes personnelles prises durant le cours ainsi que les notes de cours d'Alexandre Ouellet: https://cours-alexandre-ouellet.github.io/jeux-3d/abc/gestion-camera/#les-autres-mouvements
         CinemachinePositionComposer positionComposer = cameraGereeDieu.GetComponent<CinemachinePositionComposer>();
         Vector3 offsetCamera = positionComposer.TargetOffset + positionComposer.TargetOffset.normalized * zoom; //On a besoin du vecteur entre les deux position. Vector = destination - départ
 		float distanceOffset = offsetCamera.magnitude; //(.magnitude pour avoir seulement la distance, pas les vecteurs)
@@ -183,6 +184,7 @@ public class DeplacementCamera : MonoBehaviour
             positionComposer.TargetOffset = offsetCamera;//(un + puisqu'il faut que si une des valeur du vecteur est négative, elle puisse s'appliquer normalement)
 
         }
+        //Fin de la partie grandement inspirée
     }
     /// <summary>
     /// Méthode lancée lors de la suppression de la caméra-dieu.
